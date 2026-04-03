@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FOR-LOG-002 · Registros de Despacho — Congelados Puntanos</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --azul:    #1A3E6E;
+  --azul-m:  #2B5FA0;
+  --azul-c:  #E6F1FB;
+  --teal:    #0F6E56;
+  --teal-c:  #E1F5EE;
+  --coral:   #993C1D;
+  --coral-c: #FAECE7;
+  --amber:   #BA7517;
+  --amber-c: #FAEEDA;
+  --gris:    #5F5E5A;
+  --gris-c:  #F5F5F3;
+  --borde:   #D3D1C7;
+  --texto:   #2C2C2A;
+  --bg:      #F1EFE8;
+  --white:   #FFFFFF;
+  --danger:  #E24B4A;
+  --success: #1D9E75;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--texto); min-height: 100vh; }
+
+/* HEADER */
+.header {
+  background: var(--azul);
+  padding: 16px 28px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 200;
+  box-shadow: 0 2px 16px rgba(26,62,110,0.3);
+}
+.h-left { display: flex; flex-direction: column; gap: 2px; }
+.h-empresa { font-family: 'DM Mono', monospace; font-size: 10px; color: #7BA7D4; letter-spacing: 2px; text-transform: uppercase; }
+.h-titulo { font-size: 16px; font-weight: 600; color: white; }
+.h-right { display: flex; gap: 8px; align-items: center; }
+.badge { font-family: 'DM Mono', monospace; font-size: 10px; padding: 3px 9px; border-radius: 4px; font-weight: 500; }
+.badge-cod { background: rgba(255,255,255,0.15); color: white; }
+.badge-ver { background: var(--teal); color: white; }
+
+/* TABS */
+.tabs-bar {
+  background: white;
+  border-bottom: 1px solid var(--borde);
+  display: flex;
+  overflow-x: auto;
+  position: sticky; top: 57px; z-index: 100;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.tab {
+  padding: 13px 20px;
+  font-size: 13px; font-weight: 500;
+  color: var(--gris);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+  transition: color 0.15s, border-color 0.15s;
+  display: flex; align-items: center; gap: 7px;
+}
+.tab:hover { color: var(--azul-m); }
+.tab.activo { color: var(--azul); border-bottom-color: var(--azul); }
+.tab .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--borde); }
+.tab.activo .dot { background: var(--azul); }
+.tab .cnt {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  background: var(--azul-c); color: var(--azul-m);
+  padding: 1px 6px; border-radius: 10px; display: none;
+}
+.tab .cnt.visible { display: inline; }
+
+/* SECCIONES */
+.seccion { display: none; padding: 28px 24px 80px; max-width: 860px; margin: 0 auto; }
+.seccion.activa { display: block; animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* CARD */
+.card {
+  background: white; border-radius: 12px; padding: 24px;
+  border: 1px solid var(--borde); margin-bottom: 16px;
+}
+.card-titulo {
+  font-size: 15px; font-weight: 600; color: var(--azul);
+  margin-bottom: 16px; padding-bottom: 10px;
+  border-bottom: 1px solid var(--borde);
+  display: flex; align-items: center; gap: 8px;
+}
+.card-titulo .ico { font-size: 18px; }
+
+/* GRID FORMULARIO */
+.fgrid { display: grid; gap: 14px; }
+.fgrid-2 { grid-template-columns: 1fr 1fr; }
+.fgrid-3 { grid-template-columns: 1fr 1fr 1fr; }
+.fgrid-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+@media (max-width: 600px) {
+  .fgrid-2, .fgrid-3, .fgrid-4 { grid-template-columns: 1fr; }
+}
+
+/* CAMPO */
+.campo { display: flex; flex-direction: column; gap: 5px; }
+.campo label {
+  font-size: 11px; font-weight: 600; color: var(--gris);
+  text-transform: uppercase; letter-spacing: 0.8px;
+}
+.campo label span.req { color: var(--danger); margin-left: 2px; }
+.campo input, .campo select, .campo textarea {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px; color: var(--texto);
+  border: 1.5px solid var(--borde); border-radius: 8px;
+  padding: 9px 12px; background: var(--gris-c);
+  transition: border-color 0.15s, background 0.15s;
+  width: 100%;
+}
+.campo input:focus, .campo select:focus, .campo textarea:focus {
+  outline: none; border-color: var(--azul-m); background: white;
+}
+.campo input.error { border-color: var(--danger); background: #fff5f5; }
+.campo input.ok { border-color: var(--success); background: #f0fdf8; }
+.campo .hint { font-size: 11px; color: var(--gris); margin-top: 2px; }
+.campo .alerta { font-size: 11px; color: var(--danger); margin-top: 2px; display: none; }
+.campo .alerta.visible { display: block; }
+
+/* TEMPERATURA */
+.temp-display {
+  font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 500;
+  text-align: center; padding: 8px; border-radius: 8px;
+  min-width: 80px; transition: background 0.3s, color 0.3s;
+}
+.temp-ok { background: var(--teal-c); color: var(--teal); }
+.temp-warn { background: var(--amber-c); color: var(--amber); }
+.temp-danger { background: var(--coral-c); color: var(--coral); }
+.temp-neutral { background: var(--gris-c); color: var(--gris); }
+
+/* TABLA DINÁMICA */
+.tabla-header {
+  display: grid; gap: 1px;
+  background: var(--azul); color: white;
+  border-radius: 8px 8px 0 0; overflow: hidden;
+}
+.tabla-header div {
+  padding: 9px 10px; font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  background: var(--azul);
+}
+.tabla-fila {
+  display: grid; gap: 1px;
+  background: var(--borde); border-left: 1px solid var(--borde); border-right: 1px solid var(--borde);
+}
+.tabla-fila:last-child { border-radius: 0 0 8px 8px; overflow: hidden; }
+.tabla-fila div { background: white; padding: 6px 8px; }
+.tabla-fila:nth-child(even) div { background: var(--gris-c); }
+.tabla-fila input, .tabla-fila select {
+  font-family: 'DM Sans', monospace; font-size: 13px;
+  border: none; background: transparent; width: 100%;
+  color: var(--texto); padding: 2px 4px;
+}
+.tabla-fila input:focus, .tabla-fila select:focus { outline: 1px solid var(--azul-m); border-radius: 4px; }
+.tabla-fila .num-fila {
+  font-family: 'DM Mono', monospace; font-size: 12px;
+  color: var(--gris); text-align: center; padding-top: 8px;
+}
+
+/* BOTONES */
+.btn { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; transition: all 0.15s; display: inline-flex; align-items: center; gap: 7px; }
+.btn-primary { background: var(--azul); color: white; }
+.btn-primary:hover { background: var(--azul-m); }
+.btn-teal { background: var(--teal); color: white; }
+.btn-teal:hover { background: #0d5d48; }
+.btn-ghost { background: transparent; color: var(--gris); border: 1.5px solid var(--borde); }
+.btn-ghost:hover { border-color: var(--azul-m); color: var(--azul-m); }
+.btn-danger { background: var(--coral-c); color: var(--coral); border: 1.5px solid #F0997B; }
+.btn-danger:hover { background: var(--coral); color: white; }
+.btn-sm { padding: 6px 12px; font-size: 12px; }
+.btn-group { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+
+/* ESTADO CHIP */
+.chip { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; font-family: 'DM Mono', monospace; display: inline-block; }
+.chip-ok { background: var(--teal-c); color: var(--teal); }
+.chip-warn { background: var(--amber-c); color: var(--amber); }
+.chip-danger { background: var(--coral-c); color: var(--coral); }
+.chip-pending { background: var(--gris-c); color: var(--gris); }
+
+/* TIMER */
+.timer-display {
+  font-family: 'DM Mono', monospace; font-size: 36px; font-weight: 500;
+  text-align: center; color: var(--azul); padding: 16px;
+  background: var(--azul-c); border-radius: 10px; letter-spacing: 4px;
+}
+.timer-meta { text-align: center; font-size: 12px; color: var(--gris); margin-top: 6px; }
+
+/* CALLOUT */
+.callout { padding: 12px 16px; border-radius: 8px; font-size: 13px; line-height: 1.5; margin: 12px 0; border-left: 4px solid; }
+.callout-amber { background: var(--amber-c); border-color: var(--amber); color: #633806; }
+.callout-teal { background: var(--teal-c); border-color: var(--teal); color: #085041; }
+.callout-danger { background: var(--coral-c); border-color: var(--coral); color: #712B13; }
+
+/* HISTORIAL */
+.historial-item {
+  background: var(--gris-c); border-radius: 8px; padding: 14px 16px;
+  margin-bottom: 8px; border: 1px solid var(--borde);
+  display: flex; align-items: flex-start; gap: 12px;
+}
+.hist-fecha { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--gris); min-width: 120px; }
+.hist-body { flex: 1; font-size: 13px; }
+.hist-titulo { font-weight: 600; color: var(--texto); margin-bottom: 2px; }
+.hist-det { color: var(--gris); font-size: 12px; }
+
+/* RESUMEN STATS */
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+@media (max-width: 600px) { .stats { grid-template-columns: 1fr 1fr; } }
+.stat-card { background: white; border-radius: 10px; padding: 16px; border: 1px solid var(--borde); text-align: center; }
+.stat-num { font-family: 'DM Mono', monospace; font-size: 28px; font-weight: 500; line-height: 1; }
+.stat-label { font-size: 11px; color: var(--gris); margin-top: 4px; }
+
+/* CHECKLIST */
+.check-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--borde); }
+.check-item:last-child { border-bottom: none; }
+.check-item input[type="checkbox"] { width: 18px; height: 18px; margin-top: 2px; cursor: pointer; accent-color: var(--teal); flex-shrink: 0; }
+.check-body { flex: 1; }
+.check-titulo { font-size: 14px; font-weight: 500; color: var(--texto); }
+.check-desc { font-size: 12px; color: var(--gris); margin-top: 2px; }
+.check-item.checked .check-titulo { text-decoration: line-through; color: var(--gris); }
+
+/* FOOTER */
+.pie { text-align: center; font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gris); padding: 24px 0; letter-spacing: 0.5px; }
+
+/* PRINT */
+@media print {
+  .header, .tabs-bar, .btn-group, .btn { display: none !important; }
+  .seccion { display: block !important; padding: 12px !important; }
+  .card { break-inside: avoid; margin-bottom: 12px; }
+  body { background: white; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="h-left">
+    <span class="h-empresa">Congelados Puntanos · Logística</span>
+    <span class="h-titulo">Registros de Armado y Despacho</span>
+  </div>
+  <div class="h-right">
+    <span class="badge badge-cod">FOR-LOG-002</span>
+    <span class="badge badge-ver">SOP-LOG-002 v1.0</span>
+  </div>
+</div>
+
+<div class="tabs-bar">
+  <div class="tab activo" onclick="irA('despacho',this)">
+    <span class="dot"></span> Despacho diario
+    <span class="cnt" id="cnt-despacho"></span>
+  </div>
+  <div class="tab" onclick="irA('temperatura',this)">
+    <span class="dot"></span> Control de temperatura
+  </div>
+  <div class="tab" onclick="irA('incidentes',this)">
+    <span class="dot"></span> Incidentes / desvíos
+    <span class="cnt" id="cnt-incidentes"></span>
+  </div>
+  <div class="tab" onclick="irA('precondiciones',this)">
+    <span class="dot"></span> Checklist previo
+  </div>
+  <div class="tab" onclick="irA('historial',this)">
+    <span class="dot"></span> Historial
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- TAB 1: DESPACHO DIARIO -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="seccion activa" id="sec-despacho">
+
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-num" id="st-total" style="color:var(--azul)">0</div>
+      <div class="stat-label">Camiones despachados</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="st-horario" style="color:var(--teal)">—</div>
+      <div class="stat-label">Primer camión local</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="st-incid" style="color:var(--amber)">0</div>
+      <div class="stat-label">Desvíos del día</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="st-tiempo" style="color:var(--gris)">—</div>
+      <div class="stat-label">Tiempo ciclo armado</div>
+    </div>
+  </div>
+
+  <!-- ENCABEZADO DEL DÍA -->
+  <div class="card">
+    <div class="card-titulo"><span class="ico">📋</span> Datos del día</div>
+    <div class="fgrid fgrid-3">
+      <div class="campo">
+        <label>Fecha <span class="req">*</span></label>
+        <input type="date" id="f-fecha" oninput="actualizarStats()">
+      </div>
+      <div class="campo">
+        <label>Encargado <span class="req">*</span></label>
+        <select id="f-encargado">
+          <option value="">Seleccionar...</option>
+          <option>Daniel Costa</option>
+          <option>Rodrigo</option>
+          <option>Emanuel</option>
+          <option>Otro</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label>Día de la semana</label>
+        <select id="f-dia">
+          <option value="">—</option>
+          <option>Lunes (4 camiones)</option>
+          <option>Martes (2 camiones)</option>
+          <option>Miércoles (3 camiones)</option>
+          <option>Jueves (4 camiones)</option>
+          <option>Viernes (5 camiones)</option>
+          <option>Sábado (3 camiones)</option>
+        </select>
+      </div>
+    </div>
+    <div class="fgrid fgrid-3" style="margin-top:14px">
+      <div class="campo">
+        <label>Hora inicio armado</label>
+        <input type="time" id="f-inicio" oninput="calcularTiempo()">
+      </div>
+      <div class="campo">
+        <label>Hora fin armado</label>
+        <input type="time" id="f-fin" oninput="calcularTiempo()">
+      </div>
+      <div class="campo">
+        <label>Tiempo total de armado</label>
+        <div class="temp-display temp-neutral" id="tiempo-total" style="font-size:18px;padding:10px">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLA DE CAMIONES -->
+  <div class="card">
+    <div class="card-titulo"><span class="ico">🚛</span> Registro por camión</div>
+    <div class="callout callout-amber">Meta: todos los camiones locales fuera antes de las 09:00. Rutas largas (VM/Norte) antes de las 06:00 los lunes y jueves.</div>
+    <div style="overflow-x:auto; margin-top:14px">
+      <div style="min-width:700px">
+        <div class="tabla-header" style="grid-template-columns: 30px 110px 130px 90px 90px 80px 80px 100px 120px">
+          <div>#</div><div>Patente</div><div>Chofer</div><div>Ruta / zona</div>
+          <div>Hora salida</div><div>Bultos</div><div>Temp. salida °C</div>
+          <div>Estado carga</div><div>OK despacho</div>
+        </div>
+        <div id="filas-camiones">
+          <!-- generado por JS -->
+        </div>
+      </div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-ghost btn-sm" onclick="agregarFilaCamion()">+ Agregar camión</button>
+      <button class="btn btn-ghost btn-sm" onclick="limpiarCamiones()">Limpiar tabla</button>
+    </div>
+  </div>
+
+  <!-- CICLO DE ARMADO -->
+  <div class="card">
+    <div class="card-titulo"><span class="ico">🔄</span> Circuito de armado — control de ejecución</div>
+    <div class="callout callout-teal">Marcar cada paso del circuito a medida que se completa. El circuito se hace en este orden para TODOS los camiones simultáneamente.</div>
+    <div style="margin-top:14px" id="circuito-checks">
+      <!-- generado por JS -->
+    </div>
+    <div style="margin-top:12px">
+      <div class="campo">
+        <label>¿Hubo segundo circuito por agregados?</label>
+        <select id="f-agregados" oninput="actualizarStats()">
+          <option value="no">No — sin agregados tardíos</option>
+          <option value="si">Sí — se repitió el circuito</option>
+        </select>
+      </div>
+    </div>
+    <div id="bloque-agregados" style="display:none; margin-top:12px">
+      <div class="campo">
+        <label>Cantidad de agregados</label>
+        <input type="number" id="f-cant-agr" placeholder="Nro. de pedidos adicionales" min="0">
+      </div>
+      <div class="campo" style="margin-top:8px">
+        <label>Tiempo adicional por agregados (min)</label>
+        <input type="number" id="f-tiempo-agr" placeholder="Minutos extra" min="0">
+      </div>
+    </div>
+  </div>
+
+  <!-- DOCUMENTACIÓN -->
+  <div class="card">
+    <div class="card-titulo"><span class="ico">📁</span> Estado de documentación</div>
+    <div class="fgrid fgrid-2">
+      <div class="campo">
+        <label>¿Carpetas separadas correctamente por camión?</label>
+        <select id="f-docs" oninput="checkDocs()">
+          <option value="">— Seleccionar</option>
+          <option value="ok">Sí — todas correctas</option>
+          <option value="mezclada">No — documentación mezclada</option>
+          <option value="incompleta">Incompleta — faltan remitos</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label>¿Corte de pedidos respetado (16:00)?</label>
+        <select id="f-corte">
+          <option value="">— Seleccionar</option>
+          <option value="ok">Sí — corte a las 16:00</option>
+          <option value="no">No — llegaron pedidos fuera de corte</option>
+        </select>
+      </div>
+    </div>
+    <div id="alerta-docs" class="callout callout-danger" style="display:none;margin-top:12px">
+      ⚠ Documentación mezclada detectada. Devolver carpetas a Administración para corrección. No entregar al chofer hasta resolver. Registrar incidente en la pestaña de Desvíos.
+    </div>
+    <div class="campo" style="margin-top:12px">
+      <label>Observaciones generales del día</label>
+      <textarea id="f-obs" rows="3" placeholder="Novedades, situaciones especiales, reemplazos..."></textarea>
+    </div>
+  </div>
+
+  <div class="btn-group">
+    <button class="btn btn-teal" onclick="guardarDespacho()">Guardar registro del día</button>
+    <button class="btn btn-ghost" onclick="window.print()">Imprimir</button>
+    <button class="btn btn-ghost" onclick="exportarCSV()">Exportar CSV</button>
+  </div>
+  <div id="msg-guardado" style="display:none;margin-top:10px" class="callout callout-teal">✓ Registro guardado correctamente.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- TAB 2: CONTROL DE TEMPERATURA -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="seccion" id="sec-temperatura">
+
+  <div class="card">
+    <div class="card-titulo"><span class="ico">🌡️</span> Control de temperatura — camiones enchufados</div>
+    <div class="callout callout-amber">Registrar al inicio de la jornada (lunes y jueves 05:00 — resto 07:15). Enviar foto al grupo de WhatsApp de temperatura.</div>
+    <div class="fgrid fgrid-2" style="margin-top:16px">
+      <div class="campo">
+        <label>Fecha y hora de registro</label>
+        <input type="datetime-local" id="t-fecha">
+      </div>
+      <div class="campo">
+        <label>Registrado por</label>
+        <select id="t-responsable">
+          <option value="">Seleccionar...</option>
+          <option>Daniel Costa</option>
+          <option>Rodrigo</option>
+          <option>Emanuel</option>
+        </select>
+      </div>
+    </div>
+    <div class="campo" style="margin-top:12px">
+      <label>¿Foto enviada al grupo de WhatsApp?</label>
+      <select id="t-foto">
+        <option value="si">Sí — foto enviada</option>
+        <option value="no">No — pendiente</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-titulo"><span class="ico">🚛</span> Temperatura por unidad</div>
+    <div style="overflow-x:auto">
+      <div style="min-width:600px" id="tabla-temp">
+        <!-- generado por JS -->
+      </div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-ghost btn-sm" onclick="agregarFilaTemp()">+ Agregar unidad</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-titulo"><span class="ico">🧊</span> Temperatura de cámaras del depósito</div>
+    <div class="fgrid fgrid-3">
+      <div class="campo">
+        <label>Cámara congelados</label>
+        <input type="number" step="0.1" id="cam-congelados" placeholder="-18°C o menos" oninput="checkCamara('cam-congelados','congelados')">
+        <span class="hint">Rango: ≤ -18°C</span>
+        <span class="alerta" id="alerta-cam-congelados">⚠ Temperatura fuera de rango</span>
+      </div>
+      <div class="campo">
+        <label>Cámara refrigerados</label>
+        <input type="number" step="0.1" id="cam-refrigerados" placeholder="0–4°C" oninput="checkCamara('cam-refrigerados','refrigerados')">
+        <span class="hint">Rango: 0°C a 4°C</span>
+        <span class="alerta" id="alerta-cam-refrigerados">⚠ Temperatura fuera de rango</span>
+      </div>
+      <div class="campo">
+        <label>Cámara automática (22 pallets)</label>
+        <input type="number" step="0.1" id="cam-auto" placeholder="-18°C o menos" oninput="checkCamara('cam-auto','congelados')">
+        <span class="hint">Rango: ≤ -18°C</span>
+        <span class="alerta" id="alerta-cam-auto">⚠ Temperatura fuera de rango</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-group">
+    <button class="btn btn-teal" onclick="guardarTemperaturas()">Guardar control de temperatura</button>
+    <button class="btn btn-ghost" onclick="window.print()">Imprimir</button>
+  </div>
+  <div id="msg-temp" style="display:none;margin-top:10px" class="callout callout-teal">✓ Control de temperatura guardado.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- TAB 3: INCIDENTES / DESVÍOS -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="seccion" id="sec-incidentes">
+
+  <div class="callout callout-amber" style="margin-bottom:16px">
+    Registrar cualquier desvío del procedimiento estándar: ausencias, documentación mezclada, temperatura fuera de rango, agregados tardíos, faltantes de carga.
+  </div>
+
+  <div class="card">
+    <div class="card-titulo"><span class="ico">⚠️</span> Nuevo incidente</div>
+    <div class="fgrid fgrid-3">
+      <div class="campo">
+        <label>Fecha y hora</label>
+        <input type="datetime-local" id="i-fecha">
+      </div>
+      <div class="campo">
+        <label>Tipo de desvío</label>
+        <select id="i-tipo" oninput="mostrarAccionDesvio()">
+          <option value="">Seleccionar tipo...</option>
+          <option value="A">A — Chofer ausente o no apto</option>
+          <option value="B">B — Agregado tardío fuera de corte</option>
+          <option value="C">C — Documentación mezclada</option>
+          <option value="D">D — Temperatura de caja fuera de rango</option>
+          <option value="E">E — Faltante de mercadería</option>
+          <option value="otro">Otro</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label>Camión / unidad afectada</label>
+        <select id="i-camion">
+          <option value="">—</option>
+          <option value="AE529PK">AE529PK — Iveco Daily · 8 pallets</option>
+          <option value="AG142FS">AG142FS — Iveco Tector · 12 pallets</option>
+          <option value="FHD137">FHD137 — Iveco Daily · 8 pallets</option>
+          <option value="ILH137">ILH137 — Iveco Daily · 8 pallets</option>
+          <option value="MGC799">MGC799 — Mercedes Benz 1012 · 12 pallets</option>
+          <option value="OTR119">OTR119 — Mercedes Benz 1012 · 12 pallets</option>
+          <option value="Otro">Otro</option>
+          <option value="Ninguno (depósito)">Ninguno (depósito)</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="bloque-accion-desvio" style="display:none;margin-top:12px" class="callout callout-teal">
+      <!-- llenado por JS -->
+    </div>
+
+    <div class="fgrid fgrid-2" style="margin-top:12px">
+      <div class="campo">
+        <label>Tiempo perdido (minutos)</label>
+        <input type="number" id="i-tiempo" placeholder="Minutos" min="0">
+      </div>
+      <div class="campo">
+        <label>Escalado a</label>
+        <select id="i-escala">
+          <option value="">Sin escalar</option>
+          <option>Rodrigo</option>
+          <option>Emanuel</option>
+          <option>Administración</option>
+        </select>
+      </div>
+    </div>
+    <div class="campo" style="margin-top:12px">
+      <label>Descripción del incidente</label>
+      <textarea id="i-desc" rows="3" placeholder="Describir qué pasó, cómo se detectó y cómo se resolvió..."></textarea>
+    </div>
+    <div class="campo" style="margin-top:12px">
+      <label>Acción tomada</label>
+      <textarea id="i-accion" rows="2" placeholder="Qué se hizo para resolver el desvío..."></textarea>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="guardarIncidente()">Registrar incidente</button>
+      <button class="btn btn-ghost" onclick="limpiarIncidente()">Limpiar</button>
+    </div>
+    <div id="msg-incidente" style="display:none;margin-top:10px" class="callout callout-teal">✓ Incidente registrado.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-titulo"><span class="ico">📊</span> Incidentes registrados</div>
+    <div id="lista-incidentes">
+      <div style="text-align:center;padding:24px;color:var(--gris);font-size:13px">Sin incidentes registrados en esta sesión.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- TAB 4: CHECKLIST PREVIO -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="seccion" id="sec-precondiciones">
+
+  <div class="card">
+    <div class="card-titulo"><span class="ico">✅</span> Checklist de precondiciones — inicio de jornada</div>
+    <div class="callout callout-amber">Completar ANTES de iniciar el armado de cargas. Si algún ítem crítico no se cumple, no iniciar hasta resolver.</div>
+
+    <div style="margin-top:16px" id="checklist-items">
+      <!-- generado por JS -->
+    </div>
+
+    <div style="margin-top:16px; padding:12px; background:var(--gris-c); border-radius:8px; display:flex; align-items:center; justify-content:space-between;">
+      <div style="font-size:13px; color:var(--gris)">Progreso del checklist</div>
+      <div style="font-family:'DM Mono',monospace; font-size:16px; font-weight:500; color:var(--azul)" id="check-progreso">0 / 10</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-titulo"><span class="ico">⏱️</span> Temporizador de armado</div>
+    <div class="callout callout-teal">Meta: completar el ciclo de armado en 90 minutos o menos sin agregados tardíos.</div>
+    <div style="margin-top:16px">
+      <div class="timer-display" id="timer-display">00:00:00</div>
+      <div class="timer-meta">Meta: ≤ 90 min · Baseline actual: ~120 min + repetición por agregados</div>
+    </div>
+    <div class="btn-group" style="justify-content:center">
+      <button class="btn btn-teal" id="btn-timer" onclick="toggleTimer()">▶ Iniciar</button>
+      <button class="btn btn-ghost" onclick="resetTimer()">↺ Reiniciar</button>
+    </div>
+    <div id="timer-alerta" style="display:none; margin-top:12px" class="callout callout-danger">
+      ⚠ Superaste los 90 minutos. Registrar causa del desvío en la pestaña Incidentes.
+    </div>
+  </div>
+
+  <div class="btn-group">
+    <button class="btn btn-teal" onclick="guardarChecklist()">Guardar checklist</button>
+    <button class="btn btn-ghost" onclick="window.print()">Imprimir</button>
+  </div>
+  <div id="msg-check" style="display:none;margin-top:10px" class="callout callout-teal">✓ Checklist guardado.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- TAB 5: HISTORIAL -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="seccion" id="sec-historial">
+
+  <div class="stats" id="stats-hist">
+    <div class="stat-card"><div class="stat-num" id="hs-despachos" style="color:var(--azul)">0</div><div class="stat-label">Registros guardados</div></div>
+    <div class="stat-card"><div class="stat-num" id="hs-incidentes" style="color:var(--amber)">0</div><div class="stat-label">Incidentes totales</div></div>
+    <div class="stat-card"><div class="stat-num" id="hs-temp" style="color:var(--teal)">0</div><div class="stat-label">Controles de temp.</div></div>
+    <div class="stat-card"><div class="stat-num" id="hs-checks" style="color:var(--gris)">0</div><div class="stat-label">Checklists</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-titulo"><span class="ico">📂</span> Historial de registros</div>
+    <div id="lista-historial">
+      <div style="text-align:center;padding:32px;color:var(--gris);font-size:13px">
+        No hay registros guardados aún. Los registros aparecen aquí al guardar desde las otras pestañas.
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-group">
+    <button class="btn btn-ghost" onclick="exportarTodoCSV()">Exportar todo a CSV</button>
+    <button class="btn btn-danger btn-sm" onclick="limpiarHistorial()">Borrar historial</button>
+  </div>
+</div>
+
+<div class="pie">FOR-LOG-002 · SOP-LOG-002 v1.0 · Congelados Puntanos · Logística · Documento interno</div>
+
+<script>
+// ── GOOGLE SHEETS ENDPOINT ────────────────────────────────────────────
+const GS_URL = 'https://script.google.com/macros/s/AKfycbyr7rxFDRW3aajA5BuVu7AiipVE4cKzi_In3r0z5CWHaj-OxZnHfJgPvwDhp7ywCrnq/exec';
+
+function enviarASheets(hoja, encabezados, fila) {
+  fetch(GS_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ hoja, encabezados, fila })
+  }).catch(err => console.warn('Error enviando a Sheets:', err));
+}
+
+// ── PERSISTENCIA localStorage ─────────────────────────────────────────
+const LS_KEY = 'forlog002_v1';
+
+function cargarData() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    return raw ? JSON.parse(raw) : { despachos:[], temperaturas:[], incidentes:[], checklists:[] };
+  } catch(e) {
+    return { despachos:[], temperaturas:[], incidentes:[], checklists:[] };
+  }
+}
+
+function persistir() {
+  try { localStorage.setItem(LS_KEY, JSON.stringify(DATA)); } catch(e) {}
+}
+
+const DATA = cargarData();
+
+// ── NAVEGACIÓN DE TABS ────────────────────────────────────────────────
+function irA(id, el) {
+  document.querySelectorAll('.seccion').forEach(s => s.classList.remove('activa'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('activo'));
+  document.getElementById('sec-' + id).classList.add('activa');
+  el.classList.add('activo');
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  // Fecha de hoy
+  const hoy = new Date().toISOString().split('T')[0];
+  document.getElementById('f-fecha').value = hoy;
+  const ahora = new Date().toISOString().slice(0,16);
+  document.getElementById('t-fecha').value = ahora;
+  document.getElementById('i-fecha').value = ahora;
+
+  // Inicializar tablas
+  for(let i=0; i<4; i++) agregarFilaCamion();
+  for(let i=0; i<3; i++) agregarFilaTemp();
+  iniciarCircuito();
+  iniciarChecklist();
+  renderHistorial();
+  renderListaIncidentes();
+  actualizarContadores();
+
+  // Banner de estado de almacenamiento
+  const totalGuardados = DATA.despachos.length + DATA.incidentes.length + DATA.temperaturas.length + DATA.checklists.length;
+  if (totalGuardados > 0) {
+    const banner = document.createElement('div');
+    banner.style = 'position:fixed;bottom:16px;right:16px;background:var(--teal);color:white;padding:10px 16px;border-radius:8px;font-size:12px;font-family:"DM Mono",monospace;z-index:999;box-shadow:0 4px 12px rgba(0,0,0,0.2)';
+    banner.textContent = '✓ ' + totalGuardados + ' registro' + (totalGuardados > 1 ? 's' : '') + ' recuperado' + (totalGuardados > 1 ? 's' : '') + ' del dispositivo';
+    document.body.appendChild(banner);
+    setTimeout(() => banner.remove(), 4000);
+  }
+
+  document.getElementById('f-agregados').addEventListener('change', () => {
+    document.getElementById('bloque-agregados').style.display =
+      document.getElementById('f-agregados').value === 'si' ? 'block' : 'none';
+  });
+});
+
+// ── TABLA CAMIONES ─────────────────────────────────────────────────────
+const PATENTES = [
+  { val: 'AE529PK', label: 'AE529PK — Iveco Daily · 8 pallets' },
+  { val: 'AG142FS', label: 'AG142FS — Iveco Tector · 12 pallets' },
+  { val: 'FHD137',  label: 'FHD137 — Iveco Daily · 8 pallets' },
+  { val: 'ILH137',  label: 'ILH137 — Iveco Daily · 8 pallets' },
+  { val: 'MGC799',  label: 'MGC799 — Mercedes Benz 1012 · 12 pallets' },
+  { val: 'OTR119',  label: 'OTR119 — Mercedes Benz 1012 · 12 pallets' },
+  { val: 'Otro',    label: 'Otro' },
+];
+const ZONAS = ['SL Ciudad zona 1','SL Ciudad zona 2','VM + Justo Daract','NorOeste SL','NorEste SL','Zona serrana','Supermercados SL'];
+let filaCam = 0;
+
+function agregarFilaCamion() {
+  filaCam++;
+  const cont = document.getElementById('filas-camiones');
+  const cols = 'grid-template-columns: 30px 110px 130px 90px 90px 80px 80px 100px 120px';
+  const fila = document.createElement('div');
+  fila.className = 'tabla-fila';
+  fila.setAttribute('style', cols);
+  fila.id = 'fcam-' + filaCam;
+  fila.innerHTML = `
+    <div class="num-fila">${filaCam}</div>
+    <div><select style="width:100%;font-size:12px;border:none;background:transparent;color:var(--texto)">
+      <option value="">—</option>${PATENTES.map(p=>`<option value="${p.val}">${p.label}</option>`).join('')}
+    </select></div>
+    <div><input type="text" placeholder="Nombre chofer" style="width:100%"></div>
+    <div><select style="width:100%;font-size:12px;border:none;background:transparent;color:var(--texto)">
+      <option value="">—</option>${ZONAS.map(z=>`<option>${z}</option>`).join('')}
+    </select></div>
+    <div><input type="time" oninput="checkHoraSalida(this,${filaCam})" style="width:100%"></div>
+    <div><input type="number" placeholder="0" min="0" style="width:100%"></div>
+    <div><input type="number" step="0.1" placeholder="°C" id="temp-cam-${filaCam}" oninput="colorTemp(this)" style="width:100%"></div>
+    <div><select style="width:100%;font-size:12px;border:none;background:transparent" id="estado-cam-${filaCam}">
+      <option value="">—</option>
+      <option value="ok">✓ OK</option>
+      <option value="obs">⚠ Observado</option>
+      <option value="inc">✗ Incompleto</option>
+    </select></div>
+    <div style="display:flex;align-items:center;justify-content:center">
+      <input type="checkbox" id="ok-cam-${filaCam}" style="width:18px;height:18px;accent-color:var(--teal)">
+    </div>`;
+  cont.appendChild(fila);
+  actualizarStats();
+}
+
+function colorTemp(input) {
+  const v = parseFloat(input.value);
+  if (isNaN(v)) return;
+  if (v <= -18) input.style.color = 'var(--teal)';
+  else if (v <= -15) input.style.color = 'var(--amber)';
+  else input.style.color = 'var(--coral)';
+}
+
+function checkHoraSalida(input, id) {
+  const v = input.value;
+  if (!v) return;
+  const [h, m] = v.split(':').map(Number);
+  const mins = h * 60 + m;
+  const meta = 9 * 60; // 09:00
+  input.style.background = mins <= meta ? '#f0fdf8' : '#fff5f5';
+  actualizarStats();
+}
+
+function limpiarCamiones() {
+  document.getElementById('filas-camiones').innerHTML = '';
+  filaCam = 0;
+  for(let i=0;i<4;i++) agregarFilaCamion();
+}
+
+// ── TABLA TEMPERATURA ──────────────────────────────────────────────────
+let filaTemp = 0;
+function agregarFilaTemp() {
+  filaTemp++;
+  const cont = document.getElementById('tabla-temp');
+  if (filaTemp === 1) {
+    const header = document.createElement('div');
+    header.className = 'tabla-header';
+    header.style = 'grid-template-columns:30px 110px 200px 100px 120px 120px';
+    header.innerHTML = '<div>#</div><div>Patente</div><div>Descripción unidad</div><div>Temp. medida °C</div><div>Estado</div><div>Observación</div>';
+    cont.appendChild(header);
+  }
+  const fila = document.createElement('div');
+  fila.className = 'tabla-fila';
+  fila.style.gridTemplateColumns = '30px 110px 200px 100px 120px 120px';
+  fila.innerHTML = `
+    <div class="num-fila">${filaTemp}</div>
+    <div><select style="width:100%;font-size:12px;border:none;background:transparent">
+      <option value="">—</option>${PATENTES.map(p=>`<option value="${p.val}">${p.label}</option>`).join('')}
+    </select></div>
+    <div><input type="text" placeholder="Ej: Camión VM enchufado" style="width:100%"></div>
+    <div><input type="number" step="0.1" placeholder="°C" id="tp${filaTemp}" oninput="estadoTemp(this,'est${filaTemp}')" style="width:100%"></div>
+    <div id="est${filaTemp}"><span class="chip chip-pending">—</span></div>
+    <div><input type="text" placeholder="Notas" style="width:100%"></div>`;
+  cont.appendChild(fila);
+}
+
+function estadoTemp(input, estId) {
+  const v = parseFloat(input.value);
+  const el = document.getElementById(estId);
+  if (isNaN(v)) { el.innerHTML = '<span class="chip chip-pending">—</span>'; return; }
+  if (v <= -18) el.innerHTML = '<span class="chip chip-ok">OK ✓</span>';
+  else if (v <= -15) el.innerHTML = '<span class="chip chip-warn">⚠ Límite</span>';
+  else el.innerHTML = '<span class="chip chip-danger">✗ Fuera</span>';
+  colorTemp(input);
+}
+
+// ── CÁMARAS ────────────────────────────────────────────────────────────
+function checkCamara(id, tipo) {
+  const v = parseFloat(document.getElementById(id).value);
+  const alertId = 'alerta-' + id.replace('cam-','cam-');
+  const alerta = document.getElementById('alerta-' + id);
+  const input = document.getElementById(id);
+  if (isNaN(v)) return;
+  let ok = tipo === 'congelados' ? v <= -18 : (v >= 0 && v <= 4);
+  alerta.classList.toggle('visible', !ok);
+  input.classList.toggle('ok', ok);
+  input.classList.toggle('error', !ok);
+}
+
+// ── CIRCUITO DE ARMADO ─────────────────────────────────────────────────
+const PASOS_CIRCUITO = [
+  { id: 'c1', label: 'C1 — Fiambres', desc: 'Pesar y cargar fiambres de todos los camiones del día', critico: true },
+  { id: 'c2', label: 'C2 — Refrigerados', desc: 'Sacar refrigerados (lácteos, embutidos) de todos los camiones', critico: false },
+  { id: 'c3', label: 'C3 — Aderezos', desc: 'Cargar aderezos de todos los camiones', critico: false },
+  { id: 'c4', label: 'C4 — Congelados (sin helados)', desc: 'Cargar todos los congelados excepto helados', critico: true },
+  { id: 'c5', label: 'C5 — Pallets completos del contenedor', desc: 'Ir al contenedor a sacar los pallets completos asignados al día', critico: false },
+  { id: 'c6', label: 'C6 — Helados (ÚLTIMO)', desc: 'Los helados siempre se cargan al final, justo antes del cierre del camión', critico: true },
+];
+
+function iniciarCircuito() {
+  const cont = document.getElementById('circuito-checks');
+  PASOS_CIRCUITO.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'check-item';
+    div.id = 'ci-' + p.id;
+    div.innerHTML = `
+      <input type="checkbox" onchange="toggleCheck(this,'ci-${p.id}','cprog')">
+      <div class="check-body">
+        <div class="check-titulo">${p.label} ${p.critico ? '<span class="chip chip-danger" style="font-size:9px">CRÍTICO</span>' : ''}</div>
+        <div class="check-desc">${p.desc}</div>
+      </div>`;
+    cont.appendChild(div);
+  });
+}
+
+// ── CHECKLIST PRECONDICIONES ───────────────────────────────────────────
+const CHECKLIST = [
+  { label: 'Temperatura de camiones enchufados verificada', desc: 'Registrar y enviar foto al grupo WhatsApp', critico: true },
+  { label: 'Temperatura de cámaras dentro de rango', desc: 'Congelados ≤ -18°C · Refrigerados 0-4°C', critico: true },
+  { label: 'Portones abiertos y área de carga despejada', desc: 'Espacio libre para maniobra', critico: false },
+  { label: 'Personal disponible confirmado', desc: 'Si hay ausencia: reemplazo gestionado antes del inicio', critico: true },
+  { label: 'Detalle de pedidos retirado de Administración', desc: 'Separado por camión en carpeta individual', critico: true },
+  { label: 'Zorra hidráulica operativa', desc: 'Verificar funcionamiento antes de arrancar', critico: false },
+  { label: 'Documentación de cada camión separada correctamente', desc: 'Remitos + facturas + planilla de cobranza por unidad', critico: true },
+  { label: 'Corte de pedidos de ayer respetado (16:00)', desc: 'Sin agregados no autorizados pendientes', critico: false },
+  { label: 'Espacio en cámaras verificado para la jornada', desc: 'Capacidad suficiente para recibir devoluciones', critico: false },
+  { label: 'Camiones a despachar calentados / enfriados según corresponde', desc: 'Equipo de frío en funcionamiento antes de cargar', critico: true },
+];
+
+function iniciarChecklist() {
+  const cont = document.getElementById('checklist-items');
+  CHECKLIST.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'check-item';
+    div.id = 'chk-' + i;
+    div.innerHTML = `
+      <input type="checkbox" onchange="toggleCheck(this,'chk-${i}','check-progreso',${CHECKLIST.length})">
+      <div class="check-body">
+        <div class="check-titulo">${item.label} ${item.critico ? '<span class="chip chip-danger" style="font-size:9px">CRÍTICO</span>' : ''}</div>
+        <div class="check-desc">${item.desc}</div>
+      </div>`;
+    cont.appendChild(div);
+  });
+}
+
+let checkCount = 0;
+function toggleCheck(cb, itemId, progresoId, total) {
+  document.getElementById(itemId).classList.toggle('checked', cb.checked);
+  const all = document.querySelectorAll(`#${itemId}`).length ? 0 : 0;
+  // Contar checks en la sección correspondiente
+  if (progresoId === 'check-progreso') {
+    checkCount = document.querySelectorAll('#checklist-items input:checked').length;
+    document.getElementById('check-progreso').textContent = checkCount + ' / ' + CHECKLIST.length;
+  }
+}
+
+// ── CALCULAR TIEMPO DE ARMADO ──────────────────────────────────────────
+function calcularTiempo() {
+  const ini = document.getElementById('f-inicio').value;
+  const fin = document.getElementById('f-fin').value;
+  const el = document.getElementById('tiempo-total');
+  if (!ini || !fin) { el.className='temp-display temp-neutral'; el.textContent='—'; return; }
+  const [h1,m1]=ini.split(':').map(Number), [h2,m2]=fin.split(':').map(Number);
+  let mins = (h2*60+m2)-(h1*60+m1);
+  if (mins < 0) mins += 1440;
+  const h = Math.floor(mins/60), m = mins%60;
+  const texto = `${h}h ${m}m`;
+  el.textContent = texto;
+  if (mins <= 90) { el.className='temp-display temp-ok'; }
+  else if (mins <= 120) { el.className='temp-display temp-warn'; }
+  else { el.className='temp-display temp-danger'; }
+  document.getElementById('st-tiempo').textContent = texto;
+}
+
+// ── STATS ──────────────────────────────────────────────────────────────
+function actualizarStats() {
+  const checks = document.querySelectorAll('[id^="ok-cam-"]:checked').length;
+  document.getElementById('st-total').textContent = checks;
+  // Primer camión local (excluye rutas largas)
+  const tiempos = [];
+  document.querySelectorAll('.tabla-fila input[type="time"]').forEach(t => {
+    if (t.value) tiempos.push(t.value);
+  });
+  if (tiempos.length) {
+    tiempos.sort();
+    document.getElementById('st-horario').textContent = tiempos[0];
+  }
+  document.getElementById('st-incid').textContent = DATA.incidentes.length;
+}
+
+// ── DOCS ───────────────────────────────────────────────────────────────
+function checkDocs() {
+  const v = document.getElementById('f-docs').value;
+  document.getElementById('alerta-docs').style.display = v === 'mezclada' ? 'block' : 'none';
+}
+
+// ── DESVÍOS ────────────────────────────────────────────────────────────
+const ACCIONES_DESVIO = {
+  A: 'Notificar a Rodrigo · Activar chofer de guardia · No detener el armado mientras se resuelve',
+  B: 'Agregado NO se incorpora al despacho del día · Notificar a Administración y a Rodrigo · Solo Emanuel o Rodrigo pueden autorizar excepciones',
+  C: 'Devolver carpetas a Administración para corrección · No entregar al chofer hasta resolver · Registrar tiempo perdido',
+  D: 'NO autorizar salida · Verificar equipo de frío · Reportar a Rodrigo · Reasignar carga si es necesario',
+  E: 'Notificar a Administración · Ajustar remito antes de salir · No despachar sin remito correcto',
+};
+
+function mostrarAccionDesvio() {
+  const tipo = document.getElementById('i-tipo').value;
+  const bloque = document.getElementById('bloque-accion-desvio');
+  if (tipo && ACCIONES_DESVIO[tipo]) {
+    bloque.style.display = 'block';
+    bloque.innerHTML = '<strong>Acción según SOP-LOG-002:</strong> ' + ACCIONES_DESVIO[tipo];
+  } else {
+    bloque.style.display = 'none';
+  }
+}
+
+// ── TIMER ──────────────────────────────────────────────────────────────
+let timerInterval = null, timerSecs = 0, timerRunning = false;
+function toggleTimer() {
+  if (timerRunning) {
+    clearInterval(timerInterval);
+    timerRunning = false;
+    document.getElementById('btn-timer').textContent = '▶ Continuar';
+  } else {
+    timerRunning = true;
+    document.getElementById('btn-timer').textContent = '⏸ Pausar';
+    timerInterval = setInterval(() => {
+      timerSecs++;
+      const h = Math.floor(timerSecs/3600);
+      const m = Math.floor((timerSecs%3600)/60);
+      const s = timerSecs%60;
+      document.getElementById('timer-display').textContent =
+        String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+      if (timerSecs === 5400) { // 90 min
+        document.getElementById('timer-alerta').style.display = 'block';
+        document.getElementById('timer-display').style.color = 'var(--coral)';
+      }
+    }, 1000);
+  }
+}
+function resetTimer() {
+  clearInterval(timerInterval); timerRunning = false; timerSecs = 0;
+  document.getElementById('timer-display').textContent = '00:00:00';
+  document.getElementById('timer-display').style.color = 'var(--azul)';
+  document.getElementById('timer-alerta').style.display = 'none';
+  document.getElementById('btn-timer').textContent = '▶ Iniciar';
+}
+
+// ── GUARDAR ────────────────────────────────────────────────────────────
+function guardarDespacho() {
+  const reg = {
+    tipo: 'despacho',
+    fecha: document.getElementById('f-fecha').value,
+    encargado: document.getElementById('f-encargado').value,
+    dia: document.getElementById('f-dia').value,
+    inicio: document.getElementById('f-inicio').value,
+    fin: document.getElementById('f-fin').value,
+    agregados: document.getElementById('f-agregados').value,
+    obs: document.getElementById('f-obs').value,
+    ts: new Date().toLocaleString('es-AR')
+  };
+  DATA.despachos.push(reg);
+  persistir();
+  enviarASheets(
+    'Despachos',
+    ['Timestamp','Fecha','Encargado','Dia','Hora inicio','Hora fin','Agregados','Observaciones'],
+    [reg.ts, reg.fecha, reg.encargado, reg.dia, reg.inicio, reg.fin, reg.agregados, reg.obs]
+  );
+  mostrarMsg('msg-guardado');
+  renderHistorial();
+  actualizarContadores();
+}
+
+function guardarTemperaturas() {
+  const regTemp = {
+    tipo: 'temperatura',
+    responsable: document.getElementById('t-responsable').value,
+    foto: document.getElementById('t-foto').value,
+    camCongelados: document.getElementById('cam-congelados').value,
+    camRefrigerados: document.getElementById('cam-refrigerados').value,
+    camAuto: document.getElementById('cam-auto').value,
+    ts: new Date().toLocaleString('es-AR')
+  };
+  DATA.temperaturas.push(regTemp);
+  persistir();
+  enviarASheets(
+    'Temperaturas',
+    ['Timestamp','Responsable','Foto enviada','Cam. congelados °C','Cam. refrigerados °C','Cam. automática °C'],
+    [regTemp.ts, regTemp.responsable, regTemp.foto, regTemp.camCongelados, regTemp.camRefrigerados, regTemp.camAuto]
+  );
+  mostrarMsg('msg-temp');
+  renderHistorial();
+  actualizarContadores();
+}
+
+function guardarIncidente() {
+  const reg = {
+    tipo: 'incidente',
+    fecha: document.getElementById('i-fecha').value,
+    tipoDesvio: document.getElementById('i-tipo').value,
+    camion: document.getElementById('i-camion').value,
+    tiempo: document.getElementById('i-tiempo').value,
+    escala: document.getElementById('i-escala').value,
+    desc: document.getElementById('i-desc').value,
+    accion: document.getElementById('i-accion').value,
+    ts: new Date().toLocaleString('es-AR')
+  };
+  DATA.incidentes.push(reg);
+  persistir();
+  enviarASheets(
+    'Incidentes',
+    ['Timestamp','Fecha','Tipo desvío','Camión','Tiempo perdido (min)','Escalado a','Descripción','Acción tomada'],
+    [reg.ts, reg.fecha, reg.tipoDesvio, reg.camion, reg.tiempo, reg.escala, reg.desc, reg.accion]
+  );
+  mostrarMsg('msg-incidente');
+  renderListaIncidentes();
+  renderHistorial();
+  actualizarContadores();
+  document.getElementById('st-incid').textContent = DATA.incidentes.length;
+}
+
+function guardarChecklist() {
+  const regCheck = { tipo:'checklist', completos: checkCount, total: CHECKLIST.length, ts: new Date().toLocaleString('es-AR') };
+  DATA.checklists.push(regCheck);
+  persistir();
+  enviarASheets(
+    'Checklists',
+    ['Timestamp','Ítems completados','Total ítems','Porcentaje'],
+    [regCheck.ts, regCheck.completos, regCheck.total, Math.round(regCheck.completos/regCheck.total*100)+'%']
+  );
+  mostrarMsg('msg-check');
+  renderHistorial();
+  actualizarContadores();
+}
+
+function limpiarIncidente() {
+  ['i-tipo','i-camion','i-escala'].forEach(id => document.getElementById(id).value='');
+  ['i-desc','i-accion'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('i-tiempo').value='';
+  document.getElementById('bloque-accion-desvio').style.display='none';
+}
+
+// ── RENDER ─────────────────────────────────────────────────────────────
+function renderListaIncidentes() {
+  const cont = document.getElementById('lista-incidentes');
+  if (!DATA.incidentes.length) { cont.innerHTML='<div style="text-align:center;padding:24px;color:var(--gris);font-size:13px">Sin incidentes registrados.</div>'; return; }
+  cont.innerHTML = DATA.incidentes.map((inc, i) => `
+    <div class="historial-item">
+      <div class="hist-fecha">${inc.ts}</div>
+      <div class="hist-body">
+        <div class="hist-titulo">Desvío ${inc.tipoDesvio} · ${inc.camion || 'General'}</div>
+        <div class="hist-det">${inc.desc || '—'} · Tiempo perdido: ${inc.tiempo || '0'} min · Escalado: ${inc.escala || 'No'}</div>
+      </div>
+      <span class="chip chip-danger">${inc.tipoDesvio}</span>
+    </div>`).join('');
+  document.getElementById('cnt-incidentes').textContent = DATA.incidentes.length;
+  document.getElementById('cnt-incidentes').classList.add('visible');
+}
+
+function renderHistorial() {
+  const todos = [...DATA.despachos, ...DATA.temperaturas, ...DATA.incidentes, ...DATA.checklists]
+    .sort((a,b) => new Date(b.ts) - new Date(a.ts));
+  const cont = document.getElementById('lista-historial');
+  if (!todos.length) { cont.innerHTML='<div style="text-align:center;padding:32px;color:var(--gris);font-size:13px">No hay registros guardados aún.</div>'; return; }
+  const iconos = { despacho:'📋', temperatura:'🌡️', incidente:'⚠️', checklist:'✅' };
+  cont.innerHTML = todos.map(r => `
+    <div class="historial-item">
+      <div class="hist-fecha">${iconos[r.tipo] || '📄'} ${r.ts}</div>
+      <div class="hist-body">
+        <div class="hist-titulo">${r.tipo.charAt(0).toUpperCase()+r.tipo.slice(1)} ${r.fecha ? '· '+r.fecha : ''}</div>
+        <div class="hist-det">${r.obs || r.desc || r.tipo === 'temperatura' ? 'Control de temperatura registrado' : r.tipo === 'checklist' ? `Checklist: ${r.completos}/${r.total} ítems` : ''}</div>
+      </div>
+    </div>`).join('');
+}
+
+function actualizarContadores() {
+  document.getElementById('hs-despachos').textContent = DATA.despachos.length;
+  document.getElementById('hs-incidentes').textContent = DATA.incidentes.length;
+  document.getElementById('hs-temp').textContent = DATA.temperaturas.length;
+  document.getElementById('hs-checks').textContent = DATA.checklists.length;
+  if (DATA.despachos.length) {
+    document.getElementById('cnt-despacho').textContent = DATA.despachos.length;
+    document.getElementById('cnt-despacho').classList.add('visible');
+  }
+}
+
+function mostrarMsg(id) {
+  const el = document.getElementById(id);
+  el.style.display = 'block';
+  el.innerHTML = '✓ Guardado localmente y enviado a Google Sheets.';
+  setTimeout(() => el.style.display='none', 4000);
+}
+
+// ── EXPORT CSV ─────────────────────────────────────────────────────────
+function exportarCSV() {
+  const filas = [['fecha','encargado','dia','inicio_armado','fin_armado','agregados','obs']];
+  DATA.despachos.forEach(d => filas.push([d.fecha,d.encargado,d.dia,d.inicio,d.fin,d.agregados,d.obs]));
+  descargarCSV(filas, 'despacho_' + new Date().toISOString().split('T')[0] + '.csv');
+}
+
+function exportarTodoCSV() {
+  const filas = [['tipo','fecha','detalle','ts']];
+  DATA.despachos.forEach(d => filas.push(['despacho',d.fecha,d.dia,d.ts]));
+  DATA.incidentes.forEach(i => filas.push(['incidente',i.fecha,'Desvío '+i.tipoDesvio+' · '+i.desc,i.ts]));
+  DATA.temperaturas.forEach(t => filas.push(['temperatura','','-',t.ts]));
+  DATA.checklists.forEach(c => filas.push(['checklist','',c.completos+'/'+c.total,c.ts]));
+  descargarCSV(filas, 'for_log_002_completo.csv');
+}
+
+function descargarCSV(filas, nombre) {
+  const contenido = filas.map(f => f.map(v => '"'+(v||'').toString().replace(/"/g,'""')+'"').join(',')).join('\n');
+  const blob = new Blob(['\uFEFF'+contenido], {type:'text/csv;charset=utf-8'});
+  const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=nombre; a.click();
+}
+
+function limpiarHistorial() {
+  if (confirm('¿Borrar todos los registros guardados? Esta acción no se puede deshacer.')) {
+    DATA.despachos=[]; DATA.temperaturas=[]; DATA.incidentes=[]; DATA.checklists=[];
+    persistir();
+    renderHistorial(); actualizarContadores();
+    document.getElementById('lista-incidentes').innerHTML='<div style="text-align:center;padding:24px;color:var(--gris);font-size:13px">Sin incidentes registrados en esta sesión.</div>';
+  }
+}
+</script>
+</body>
+</html>
