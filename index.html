@@ -27,7 +27,7 @@
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--texto); min-height: 100vh; }
-
+ 
 /* HEADER */
 .header {
   background: var(--azul);
@@ -43,7 +43,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .badge { font-family: 'DM Mono', monospace; font-size: 10px; padding: 3px 9px; border-radius: 4px; font-weight: 500; }
 .badge-cod { background: rgba(255,255,255,0.15); color: white; }
 .badge-ver { background: var(--teal); color: white; }
-
+ 
 /* TABS */
 .tabs-bar {
   background: white;
@@ -73,12 +73,12 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
   padding: 1px 6px; border-radius: 10px; display: none;
 }
 .tab .cnt.visible { display: inline; }
-
+ 
 /* SECCIONES */
 .seccion { display: none; padding: 28px 24px 80px; max-width: 860px; margin: 0 auto; }
 .seccion.activa { display: block; animation: fadeIn 0.2s ease; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-
+ 
 /* CARD */
 .card {
   background: white; border-radius: 12px; padding: 24px;
@@ -91,7 +91,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
   display: flex; align-items: center; gap: 8px;
 }
 .card-titulo .ico { font-size: 18px; }
-
+ 
 /* GRID FORMULARIO */
 .fgrid { display: grid; gap: 14px; }
 .fgrid-2 { grid-template-columns: 1fr 1fr; }
@@ -100,7 +100,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 @media (max-width: 600px) {
   .fgrid-2, .fgrid-3, .fgrid-4 { grid-template-columns: 1fr; }
 }
-
+ 
 /* CAMPO */
 .campo { display: flex; flex-direction: column; gap: 5px; }
 .campo label {
@@ -124,7 +124,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .campo .hint { font-size: 11px; color: var(--gris); margin-top: 2px; }
 .campo .alerta { font-size: 11px; color: var(--danger); margin-top: 2px; display: none; }
 .campo .alerta.visible { display: block; }
-
+ 
 /* TEMPERATURA */
 .temp-display {
   font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 500;
@@ -135,7 +135,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .temp-warn { background: var(--amber-c); color: var(--amber); }
 .temp-danger { background: var(--coral-c); color: var(--coral); }
 .temp-neutral { background: var(--gris-c); color: var(--gris); }
-
+ 
 /* TABLA DINÁMICA */
 .tabla-header {
   display: grid; gap: 1px;
@@ -164,7 +164,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
   font-family: 'DM Mono', monospace; font-size: 12px;
   color: var(--gris); text-align: center; padding-top: 8px;
 }
-
+ 
 /* BOTONES */
 .btn { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; transition: all 0.15s; display: inline-flex; align-items: center; gap: 7px; }
 .btn-primary { background: var(--azul); color: white; }
@@ -177,14 +177,14 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .btn-danger:hover { background: var(--coral); color: white; }
 .btn-sm { padding: 6px 12px; font-size: 12px; }
 .btn-group { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
-
+ 
 /* ESTADO CHIP */
 .chip { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; font-family: 'DM Mono', monospace; display: inline-block; }
 .chip-ok { background: var(--teal-c); color: var(--teal); }
 .chip-warn { background: var(--amber-c); color: var(--amber); }
 .chip-danger { background: var(--coral-c); color: var(--coral); }
 .chip-pending { background: var(--gris-c); color: var(--gris); }
-
+ 
 /* TIMER */
 .timer-display {
   font-family: 'DM Mono', monospace; font-size: 36px; font-weight: 500;
@@ -192,13 +192,13 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
   background: var(--azul-c); border-radius: 10px; letter-spacing: 4px;
 }
 .timer-meta { text-align: center; font-size: 12px; color: var(--gris); margin-top: 6px; }
-
+ 
 /* CALLOUT */
 .callout { padding: 12px 16px; border-radius: 8px; font-size: 13px; line-height: 1.5; margin: 12px 0; border-left: 4px solid; }
 .callout-amber { background: var(--amber-c); border-color: var(--amber); color: #633806; }
 .callout-teal { background: var(--teal-c); border-color: var(--teal); color: #085041; }
 .callout-danger { background: var(--coral-c); border-color: var(--coral); color: #712B13; }
-
+ 
 /* HISTORIAL */
 .historial-item {
   background: var(--gris-c); border-radius: 8px; padding: 14px 16px;
@@ -209,14 +209,14 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .hist-body { flex: 1; font-size: 13px; }
 .hist-titulo { font-weight: 600; color: var(--texto); margin-bottom: 2px; }
 .hist-det { color: var(--gris); font-size: 12px; }
-
+ 
 /* RESUMEN STATS */
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
 @media (max-width: 600px) { .stats { grid-template-columns: 1fr 1fr; } }
 .stat-card { background: white; border-radius: 10px; padding: 16px; border: 1px solid var(--borde); text-align: center; }
 .stat-num { font-family: 'DM Mono', monospace; font-size: 28px; font-weight: 500; line-height: 1; }
 .stat-label { font-size: 11px; color: var(--gris); margin-top: 4px; }
-
+ 
 /* CHECKLIST */
 .check-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--borde); }
 .check-item:last-child { border-bottom: none; }
@@ -225,10 +225,10 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .check-titulo { font-size: 14px; font-weight: 500; color: var(--texto); }
 .check-desc { font-size: 12px; color: var(--gris); margin-top: 2px; }
 .check-item.checked .check-titulo { text-decoration: line-through; color: var(--gris); }
-
+ 
 /* FOOTER */
 .pie { text-align: center; font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gris); padding: 24px 0; letter-spacing: 0.5px; }
-
+ 
 /* PRINT */
 @media print {
   .header, .tabs-bar, .btn-group, .btn { display: none !important; }
@@ -239,7 +239,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 </style>
 </head>
 <body>
-
+ 
 <div class="header">
   <div class="h-left">
     <span class="h-empresa">Congelados Puntanos · Logística</span>
@@ -250,7 +250,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
     <span class="badge badge-ver">SOP-LOG-002 v1.0</span>
   </div>
 </div>
-
+ 
 <div class="tabs-bar">
   <div class="tab activo" onclick="irA('despacho',this)">
     <span class="dot"></span> Despacho diario
@@ -270,12 +270,12 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
     <span class="dot"></span> Historial
   </div>
 </div>
-
+ 
 <!-- ═══════════════════════════════════════════════════════════ -->
 <!-- TAB 1: DESPACHO DIARIO -->
 <!-- ═══════════════════════════════════════════════════════════ -->
 <div class="seccion activa" id="sec-despacho">
-
+ 
   <div class="stats">
     <div class="stat-card">
       <div class="stat-num" id="st-total" style="color:var(--azul)">0</div>
@@ -294,7 +294,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
       <div class="stat-label">Tiempo ciclo armado</div>
     </div>
   </div>
-
+ 
   <!-- ENCABEZADO DEL DÍA -->
   <div class="card">
     <div class="card-titulo"><span class="ico">📋</span> Datos del día</div>
@@ -341,7 +341,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
       </div>
     </div>
   </div>
-
+ 
   <!-- TABLA DE CAMIONES -->
   <div class="card">
     <div class="card-titulo"><span class="ico">🚛</span> Registro por camión</div>
@@ -363,7 +363,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
       <button class="btn btn-ghost btn-sm" onclick="limpiarCamiones()">Limpiar tabla</button>
     </div>
   </div>
-
+ 
   <!-- CICLO DE ARMADO -->
   <div class="card">
     <div class="card-titulo"><span class="ico">🔄</span> Circuito de armado — control de ejecución</div>
@@ -391,7 +391,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
       </div>
     </div>
   </div>
-
+ 
   <!-- DOCUMENTACIÓN -->
   <div class="card">
     <div class="card-titulo"><span class="ico">📁</span> Estado de documentación</div>
@@ -422,7 +422,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
       <textarea id="f-obs" rows="3" placeholder="Novedades, situaciones especiales, reemplazos..."></textarea>
     </div>
   </div>
-
+ 
   <div class="btn-group">
     <button class="btn btn-teal" onclick="guardarDespacho()">Guardar registro del día</button>
     <button class="btn btn-ghost" onclick="window.print()">Imprimir</button>
@@ -430,12 +430,12 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
   </div>
   <div id="msg-guardado" style="display:none;margin-top:10px" class="callout callout-teal">✓ Registro guardado correctamente.</div>
 </div>
-
+ 
 <!-- ═══════════════════════════════════════════════════════════ -->
 <!-- TAB 2: CONTROL DE TEMPERATURA -->
 <!-- ═══════════════════════════════════════════════════════════ -->
 <div class="seccion" id="sec-temperatura">
-
+ 
   <div class="card">
     <div class="card-titulo"><span class="ico">🌡️</span> Control de temperatura — camiones enchufados</div>
     <div class="callout callout-amber">Registrar al inicio de la jornada (lunes y jueves 05:00 — resto 07:15). Enviar foto al grupo de WhatsApp de temperatura.</div>
@@ -462,7 +462,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
       </select>
     </div>
   </div>
-
+ 
   <div class="card">
     <div class="card-titulo"><span class="ico">🚛</span> Temperatura por unidad</div>
     <div style="overflow-x:auto">
@@ -474,7 +474,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
       <button class="btn btn-ghost btn-sm" onclick="agregarFilaTemp()">+ Agregar unidad</button>
     </div>
   </div>
-
+ 
   <div class="card">
     <div class="card-titulo"><span class="ico">🧊</span> Temperatura de cámaras del depósito</div>
     <div class="fgrid fgrid-3">
@@ -498,23 +498,23 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
       </div>
     </div>
   </div>
-
+ 
   <div class="btn-group">
     <button class="btn btn-teal" onclick="guardarTemperaturas()">Guardar control de temperatura</button>
     <button class="btn btn-ghost" onclick="window.print()">Imprimir</button>
   </div>
   <div id="msg-temp" style="display:none;margin-top:10px" class="callout callout-teal">✓ Control de temperatura guardado.</div>
 </div>
-
+ 
 <!-- ═══════════════════════════════════════════════════════════ -->
 <!-- TAB 3: INCIDENTES / DESVÍOS -->
 <!-- ═══════════════════════════════════════════════════════════ -->
 <div class="seccion" id="sec-incidentes">
-
+ 
   <div class="callout callout-amber" style="margin-bottom:16px">
     Registrar cualquier desvío del procedimiento estándar: ausencias, documentación mezclada, temperatura fuera de rango, agregados tardíos, faltantes de carga.
   </div>
-
+ 
   <div class="card">
     <div class="card-titulo"><span class="ico">⚠️</span> Nuevo incidente</div>
     <div class="fgrid fgrid-3">
@@ -549,11 +549,11 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
         </select>
       </div>
     </div>
-
+ 
     <div id="bloque-accion-desvio" style="display:none;margin-top:12px" class="callout callout-teal">
       <!-- llenado por JS -->
     </div>
-
+ 
     <div class="fgrid fgrid-2" style="margin-top:12px">
       <div class="campo">
         <label>Tiempo perdido (minutos)</label>
@@ -583,7 +583,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
     </div>
     <div id="msg-incidente" style="display:none;margin-top:10px" class="callout callout-teal">✓ Incidente registrado.</div>
   </div>
-
+ 
   <div class="card">
     <div class="card-titulo"><span class="ico">📊</span> Incidentes registrados</div>
     <div id="lista-incidentes">
@@ -591,26 +591,26 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
     </div>
   </div>
 </div>
-
+ 
 <!-- ═══════════════════════════════════════════════════════════ -->
 <!-- TAB 4: CHECKLIST PREVIO -->
 <!-- ═══════════════════════════════════════════════════════════ -->
 <div class="seccion" id="sec-precondiciones">
-
+ 
   <div class="card">
     <div class="card-titulo"><span class="ico">✅</span> Checklist de precondiciones — inicio de jornada</div>
     <div class="callout callout-amber">Completar ANTES de iniciar el armado de cargas. Si algún ítem crítico no se cumple, no iniciar hasta resolver.</div>
-
+ 
     <div style="margin-top:16px" id="checklist-items">
       <!-- generado por JS -->
     </div>
-
+ 
     <div style="margin-top:16px; padding:12px; background:var(--gris-c); border-radius:8px; display:flex; align-items:center; justify-content:space-between;">
       <div style="font-size:13px; color:var(--gris)">Progreso del checklist</div>
       <div style="font-family:'DM Mono',monospace; font-size:16px; font-weight:500; color:var(--azul)" id="check-progreso">0 / 10</div>
     </div>
   </div>
-
+ 
   <div class="card">
     <div class="card-titulo"><span class="ico">⏱️</span> Temporizador de armado</div>
     <div class="callout callout-teal">Meta: completar el ciclo de armado en 90 minutos o menos sin agregados tardíos.</div>
@@ -626,26 +626,26 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
       ⚠ Superaste los 90 minutos. Registrar causa del desvío en la pestaña Incidentes.
     </div>
   </div>
-
+ 
   <div class="btn-group">
     <button class="btn btn-teal" onclick="guardarChecklist()">Guardar checklist</button>
     <button class="btn btn-ghost" onclick="window.print()">Imprimir</button>
   </div>
   <div id="msg-check" style="display:none;margin-top:10px" class="callout callout-teal">✓ Checklist guardado.</div>
 </div>
-
+ 
 <!-- ═══════════════════════════════════════════════════════════ -->
 <!-- TAB 5: HISTORIAL -->
 <!-- ═══════════════════════════════════════════════════════════ -->
 <div class="seccion" id="sec-historial">
-
+ 
   <div class="stats" id="stats-hist">
     <div class="stat-card"><div class="stat-num" id="hs-despachos" style="color:var(--azul)">0</div><div class="stat-label">Registros guardados</div></div>
     <div class="stat-card"><div class="stat-num" id="hs-incidentes" style="color:var(--amber)">0</div><div class="stat-label">Incidentes totales</div></div>
     <div class="stat-card"><div class="stat-num" id="hs-temp" style="color:var(--teal)">0</div><div class="stat-label">Controles de temp.</div></div>
     <div class="stat-card"><div class="stat-num" id="hs-checks" style="color:var(--gris)">0</div><div class="stat-label">Checklists</div></div>
   </div>
-
+ 
   <div class="card">
     <div class="card-titulo"><span class="ico">📂</span> Historial de registros</div>
     <div id="lista-historial">
@@ -654,31 +654,57 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
       </div>
     </div>
   </div>
-
+ 
   <div class="btn-group">
     <button class="btn btn-ghost" onclick="exportarTodoCSV()">Exportar todo a CSV</button>
     <button class="btn btn-danger btn-sm" onclick="limpiarHistorial()">Borrar historial</button>
   </div>
 </div>
-
+ 
 <div class="pie">FOR-LOG-002 · SOP-LOG-002 v1.0 · Congelados Puntanos · Logística · Documento interno</div>
-
+ 
 <script>
 // ── GOOGLE SHEETS ENDPOINT ────────────────────────────────────────────
 const GS_URL = 'https://script.google.com/macros/s/AKfycbyr7rxFDRW3aajA5BuVu7AiipVE4cKzi_In3r0z5CWHaj-OxZnHfJgPvwDhp7ywCrnq/exec';
-
+ 
 function enviarASheets(hoja, encabezados, fila) {
-  fetch(GS_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ hoja, encabezados, fila })
-  }).catch(err => console.warn('Error enviando a Sheets:', err));
+  try {
+    const payload = JSON.stringify({ hoja, encabezados, fila });
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = GS_URL;
+    form.target = 'gs_iframe_' + Date.now();
+    form.style.display = 'none';
+ 
+    // Crear iframe oculto para recibir la respuesta sin redirigir
+    const iframe = document.createElement('iframe');
+    iframe.name = form.target;
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+ 
+    // Campo con los datos
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'data';
+    input.value = payload;
+    form.appendChild(input);
+ 
+    document.body.appendChild(form);
+    form.submit();
+ 
+    // Limpiar después de enviar
+    setTimeout(() => {
+      document.body.removeChild(form);
+      document.body.removeChild(iframe);
+    }, 5000);
+  } catch(err) {
+    console.warn('Error enviando a Sheets:', err);
+  }
 }
-
+ 
 // ── PERSISTENCIA localStorage ─────────────────────────────────────────
 const LS_KEY = 'forlog002_v1';
-
+ 
 function cargarData() {
   try {
     const raw = localStorage.getItem(LS_KEY);
@@ -687,13 +713,13 @@ function cargarData() {
     return { despachos:[], temperaturas:[], incidentes:[], checklists:[] };
   }
 }
-
+ 
 function persistir() {
   try { localStorage.setItem(LS_KEY, JSON.stringify(DATA)); } catch(e) {}
 }
-
+ 
 const DATA = cargarData();
-
+ 
 // ── NAVEGACIÓN DE TABS ────────────────────────────────────────────────
 function irA(id, el) {
   document.querySelectorAll('.seccion').forEach(s => s.classList.remove('activa'));
@@ -701,7 +727,7 @@ function irA(id, el) {
   document.getElementById('sec-' + id).classList.add('activa');
   el.classList.add('activo');
 }
-
+ 
 // ── INIT ──────────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
   // Fecha de hoy
@@ -710,7 +736,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const ahora = new Date().toISOString().slice(0,16);
   document.getElementById('t-fecha').value = ahora;
   document.getElementById('i-fecha').value = ahora;
-
+ 
   // Inicializar tablas
   for(let i=0; i<4; i++) agregarFilaCamion();
   for(let i=0; i<3; i++) agregarFilaTemp();
@@ -719,7 +745,7 @@ window.addEventListener('DOMContentLoaded', () => {
   renderHistorial();
   renderListaIncidentes();
   actualizarContadores();
-
+ 
   // Banner de estado de almacenamiento
   const totalGuardados = DATA.despachos.length + DATA.incidentes.length + DATA.temperaturas.length + DATA.checklists.length;
   if (totalGuardados > 0) {
@@ -729,13 +755,13 @@ window.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(banner);
     setTimeout(() => banner.remove(), 4000);
   }
-
+ 
   document.getElementById('f-agregados').addEventListener('change', () => {
     document.getElementById('bloque-agregados').style.display =
       document.getElementById('f-agregados').value === 'si' ? 'block' : 'none';
   });
 });
-
+ 
 // ── TABLA CAMIONES ─────────────────────────────────────────────────────
 const PATENTES = [
   { val: 'AE529PK', label: 'AE529PK — Iveco Daily · 8 pallets' },
@@ -748,7 +774,7 @@ const PATENTES = [
 ];
 const ZONAS = ['SL Ciudad zona 1','SL Ciudad zona 2','VM + Justo Daract','NorOeste SL','NorEste SL','Zona serrana','Supermercados SL'];
 let filaCam = 0;
-
+ 
 function agregarFilaCamion() {
   filaCam++;
   const cont = document.getElementById('filas-camiones');
@@ -781,7 +807,7 @@ function agregarFilaCamion() {
   cont.appendChild(fila);
   actualizarStats();
 }
-
+ 
 function colorTemp(input) {
   const v = parseFloat(input.value);
   if (isNaN(v)) return;
@@ -789,7 +815,7 @@ function colorTemp(input) {
   else if (v <= -15) input.style.color = 'var(--amber)';
   else input.style.color = 'var(--coral)';
 }
-
+ 
 function checkHoraSalida(input, id) {
   const v = input.value;
   if (!v) return;
@@ -799,13 +825,13 @@ function checkHoraSalida(input, id) {
   input.style.background = mins <= meta ? '#f0fdf8' : '#fff5f5';
   actualizarStats();
 }
-
+ 
 function limpiarCamiones() {
   document.getElementById('filas-camiones').innerHTML = '';
   filaCam = 0;
   for(let i=0;i<4;i++) agregarFilaCamion();
 }
-
+ 
 // ── TABLA TEMPERATURA ──────────────────────────────────────────────────
 let filaTemp = 0;
 function agregarFilaTemp() {
@@ -832,7 +858,7 @@ function agregarFilaTemp() {
     <div><input type="text" placeholder="Notas" style="width:100%"></div>`;
   cont.appendChild(fila);
 }
-
+ 
 function estadoTemp(input, estId) {
   const v = parseFloat(input.value);
   const el = document.getElementById(estId);
@@ -842,7 +868,7 @@ function estadoTemp(input, estId) {
   else el.innerHTML = '<span class="chip chip-danger">✗ Fuera</span>';
   colorTemp(input);
 }
-
+ 
 // ── CÁMARAS ────────────────────────────────────────────────────────────
 function checkCamara(id, tipo) {
   const v = parseFloat(document.getElementById(id).value);
@@ -855,7 +881,7 @@ function checkCamara(id, tipo) {
   input.classList.toggle('ok', ok);
   input.classList.toggle('error', !ok);
 }
-
+ 
 // ── CIRCUITO DE ARMADO ─────────────────────────────────────────────────
 const PASOS_CIRCUITO = [
   { id: 'c1', label: 'C1 — Fiambres', desc: 'Pesar y cargar fiambres de todos los camiones del día', critico: true },
@@ -865,7 +891,7 @@ const PASOS_CIRCUITO = [
   { id: 'c5', label: 'C5 — Pallets completos del contenedor', desc: 'Ir al contenedor a sacar los pallets completos asignados al día', critico: false },
   { id: 'c6', label: 'C6 — Helados (ÚLTIMO)', desc: 'Los helados siempre se cargan al final, justo antes del cierre del camión', critico: true },
 ];
-
+ 
 function iniciarCircuito() {
   const cont = document.getElementById('circuito-checks');
   PASOS_CIRCUITO.forEach(p => {
@@ -881,7 +907,7 @@ function iniciarCircuito() {
     cont.appendChild(div);
   });
 }
-
+ 
 // ── CHECKLIST PRECONDICIONES ───────────────────────────────────────────
 const CHECKLIST = [
   { label: 'Temperatura de camiones enchufados verificada', desc: 'Registrar y enviar foto al grupo WhatsApp', critico: true },
@@ -895,7 +921,7 @@ const CHECKLIST = [
   { label: 'Espacio en cámaras verificado para la jornada', desc: 'Capacidad suficiente para recibir devoluciones', critico: false },
   { label: 'Camiones a despachar calentados / enfriados según corresponde', desc: 'Equipo de frío en funcionamiento antes de cargar', critico: true },
 ];
-
+ 
 function iniciarChecklist() {
   const cont = document.getElementById('checklist-items');
   CHECKLIST.forEach((item, i) => {
@@ -911,7 +937,7 @@ function iniciarChecklist() {
     cont.appendChild(div);
   });
 }
-
+ 
 let checkCount = 0;
 function toggleCheck(cb, itemId, progresoId, total) {
   document.getElementById(itemId).classList.toggle('checked', cb.checked);
@@ -922,7 +948,7 @@ function toggleCheck(cb, itemId, progresoId, total) {
     document.getElementById('check-progreso').textContent = checkCount + ' / ' + CHECKLIST.length;
   }
 }
-
+ 
 // ── CALCULAR TIEMPO DE ARMADO ──────────────────────────────────────────
 function calcularTiempo() {
   const ini = document.getElementById('f-inicio').value;
@@ -940,7 +966,7 @@ function calcularTiempo() {
   else { el.className='temp-display temp-danger'; }
   document.getElementById('st-tiempo').textContent = texto;
 }
-
+ 
 // ── STATS ──────────────────────────────────────────────────────────────
 function actualizarStats() {
   const checks = document.querySelectorAll('[id^="ok-cam-"]:checked').length;
@@ -956,13 +982,13 @@ function actualizarStats() {
   }
   document.getElementById('st-incid').textContent = DATA.incidentes.length;
 }
-
+ 
 // ── DOCS ───────────────────────────────────────────────────────────────
 function checkDocs() {
   const v = document.getElementById('f-docs').value;
   document.getElementById('alerta-docs').style.display = v === 'mezclada' ? 'block' : 'none';
 }
-
+ 
 // ── DESVÍOS ────────────────────────────────────────────────────────────
 const ACCIONES_DESVIO = {
   A: 'Notificar a Rodrigo · Activar chofer de guardia · No detener el armado mientras se resuelve',
@@ -971,7 +997,7 @@ const ACCIONES_DESVIO = {
   D: 'NO autorizar salida · Verificar equipo de frío · Reportar a Rodrigo · Reasignar carga si es necesario',
   E: 'Notificar a Administración · Ajustar remito antes de salir · No despachar sin remito correcto',
 };
-
+ 
 function mostrarAccionDesvio() {
   const tipo = document.getElementById('i-tipo').value;
   const bloque = document.getElementById('bloque-accion-desvio');
@@ -982,7 +1008,7 @@ function mostrarAccionDesvio() {
     bloque.style.display = 'none';
   }
 }
-
+ 
 // ── TIMER ──────────────────────────────────────────────────────────────
 let timerInterval = null, timerSecs = 0, timerRunning = false;
 function toggleTimer() {
@@ -1014,7 +1040,7 @@ function resetTimer() {
   document.getElementById('timer-alerta').style.display = 'none';
   document.getElementById('btn-timer').textContent = '▶ Iniciar';
 }
-
+ 
 // ── GUARDAR ────────────────────────────────────────────────────────────
 function guardarDespacho() {
   const reg = {
@@ -1039,7 +1065,7 @@ function guardarDespacho() {
   renderHistorial();
   actualizarContadores();
 }
-
+ 
 function guardarTemperaturas() {
   const regTemp = {
     tipo: 'temperatura',
@@ -1061,7 +1087,7 @@ function guardarTemperaturas() {
   renderHistorial();
   actualizarContadores();
 }
-
+ 
 function guardarIncidente() {
   const reg = {
     tipo: 'incidente',
@@ -1087,7 +1113,7 @@ function guardarIncidente() {
   actualizarContadores();
   document.getElementById('st-incid').textContent = DATA.incidentes.length;
 }
-
+ 
 function guardarChecklist() {
   const regCheck = { tipo:'checklist', completos: checkCount, total: CHECKLIST.length, ts: new Date().toLocaleString('es-AR') };
   DATA.checklists.push(regCheck);
@@ -1101,14 +1127,14 @@ function guardarChecklist() {
   renderHistorial();
   actualizarContadores();
 }
-
+ 
 function limpiarIncidente() {
   ['i-tipo','i-camion','i-escala'].forEach(id => document.getElementById(id).value='');
   ['i-desc','i-accion'].forEach(id => document.getElementById(id).value='');
   document.getElementById('i-tiempo').value='';
   document.getElementById('bloque-accion-desvio').style.display='none';
 }
-
+ 
 // ── RENDER ─────────────────────────────────────────────────────────────
 function renderListaIncidentes() {
   const cont = document.getElementById('lista-incidentes');
@@ -1125,7 +1151,7 @@ function renderListaIncidentes() {
   document.getElementById('cnt-incidentes').textContent = DATA.incidentes.length;
   document.getElementById('cnt-incidentes').classList.add('visible');
 }
-
+ 
 function renderHistorial() {
   const todos = [...DATA.despachos, ...DATA.temperaturas, ...DATA.incidentes, ...DATA.checklists]
     .sort((a,b) => new Date(b.ts) - new Date(a.ts));
@@ -1141,7 +1167,7 @@ function renderHistorial() {
       </div>
     </div>`).join('');
 }
-
+ 
 function actualizarContadores() {
   document.getElementById('hs-despachos').textContent = DATA.despachos.length;
   document.getElementById('hs-incidentes').textContent = DATA.incidentes.length;
@@ -1152,21 +1178,21 @@ function actualizarContadores() {
     document.getElementById('cnt-despacho').classList.add('visible');
   }
 }
-
+ 
 function mostrarMsg(id) {
   const el = document.getElementById(id);
   el.style.display = 'block';
   el.innerHTML = '✓ Guardado localmente y enviado a Google Sheets.';
   setTimeout(() => el.style.display='none', 4000);
 }
-
+ 
 // ── EXPORT CSV ─────────────────────────────────────────────────────────
 function exportarCSV() {
   const filas = [['fecha','encargado','dia','inicio_armado','fin_armado','agregados','obs']];
   DATA.despachos.forEach(d => filas.push([d.fecha,d.encargado,d.dia,d.inicio,d.fin,d.agregados,d.obs]));
   descargarCSV(filas, 'despacho_' + new Date().toISOString().split('T')[0] + '.csv');
 }
-
+ 
 function exportarTodoCSV() {
   const filas = [['tipo','fecha','detalle','ts']];
   DATA.despachos.forEach(d => filas.push(['despacho',d.fecha,d.dia,d.ts]));
@@ -1175,13 +1201,13 @@ function exportarTodoCSV() {
   DATA.checklists.forEach(c => filas.push(['checklist','',c.completos+'/'+c.total,c.ts]));
   descargarCSV(filas, 'for_log_002_completo.csv');
 }
-
+ 
 function descargarCSV(filas, nombre) {
   const contenido = filas.map(f => f.map(v => '"'+(v||'').toString().replace(/"/g,'""')+'"').join(',')).join('\n');
   const blob = new Blob(['\uFEFF'+contenido], {type:'text/csv;charset=utf-8'});
   const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=nombre; a.click();
 }
-
+ 
 function limpiarHistorial() {
   if (confirm('¿Borrar todos los registros guardados? Esta acción no se puede deshacer.')) {
     DATA.despachos=[]; DATA.temperaturas=[]; DATA.incidentes=[]; DATA.checklists=[];
