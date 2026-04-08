@@ -669,34 +669,24 @@ const GS_URL = 'https://script.google.com/macros/s/AKfycbyr7rxFDRW3aajA5BuVu7Aii
  
 function enviarASheets(hoja, encabezados, fila) {
   try {
-    const payload = JSON.stringify({ hoja, encabezados, fila });
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = GS_URL;
-    form.target = 'gs_iframe_' + Date.now();
-    form.style.display = 'none';
+    // Usar script tag (JSONP) — bypasea CORB completamente
+    const payload = encodeURIComponent(JSON.stringify({ hoja, encabezados, fila }));
+    const callbackName = 'cb_' + Date.now();
  
-    // Crear iframe oculto para recibir la respuesta sin redirigir
-    const iframe = document.createElement('iframe');
-    iframe.name = form.target;
-    iframe.style.display = 'none';
-    document.body.appendChild(iframe);
+    // Crear función de callback temporal
+    window[callbackName] = function(resp) {
+      console.log('Sheets OK:', resp);
+      delete window[callbackName];
+      if (script.parentNode) script.parentNode.removeChild(script);
+    };
  
-    // Campo con los datos
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'data';
-    input.value = payload;
-    form.appendChild(input);
- 
-    document.body.appendChild(form);
-    form.submit();
- 
-    // Limpiar después de enviar
-    setTimeout(() => {
-      document.body.removeChild(form);
-      document.body.removeChild(iframe);
-    }, 5000);
+    const script = document.createElement('script');
+    script.src = GS_URL + '?callback=' + callbackName + '&data=' + payload;
+    script.onerror = function() {
+      console.warn('Error JSONP — dato guardado localmente');
+      delete window[callbackName];
+    };
+    document.head.appendChild(script);
   } catch(err) {
     console.warn('Error enviando a Sheets:', err);
   }
