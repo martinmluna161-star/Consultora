@@ -1,2 +1,2 @@
-# Consultora
-Aca subire todos los archivos que surjan de las consultorias
+# Registro Operativo Congelados
+El HTML, que alimenta un sheet para el registro de las novedades diarias
