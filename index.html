@@ -668,28 +668,23 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 const GS_URL = 'https://script.google.com/macros/s/AKfycbyr7rxFDRW3aajA5BuVu7AiipVE4cKzi_In3r0z5CWHaj-OxZnHfJgPvwDhp7ywCrnq/exec';
  
 function enviarASheets(hoja, encabezados, fila) {
-  try {
-    // Usar script tag (JSONP) — bypasea CORB completamente
-    const payload = encodeURIComponent(JSON.stringify({ hoja, encabezados, fila }));
-    const callbackName = 'cb_' + Date.now();
+  const payload = { hoja, encabezados, fila };
  
-    // Crear función de callback temporal
-    window[callbackName] = function(resp) {
-      console.log('Sheets OK:', resp);
-      delete window[callbackName];
-      if (script.parentNode) script.parentNode.removeChild(script);
-    };
- 
-    const script = document.createElement('script');
-    script.src = GS_URL + '?callback=' + callbackName + '&data=' + payload;
-    script.onerror = function() {
-      console.warn('Error JSONP — dato guardado localmente');
-      delete window[callbackName];
-    };
-    document.head.appendChild(script);
-  } catch(err) {
-    console.warn('Error enviando a Sheets:', err);
-  }
+  // Intento 1: fetch con no-cors (el más compatible)
+  fetch(GS_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify(payload)
+  })
+  .then(() => console.log('Enviado a Sheets (POST)'))
+  .catch(() => {
+    // Intento 2: GET con parámetro (fallback)
+    const url = GS_URL + '?data=' + encodeURIComponent(JSON.stringify(payload));
+    fetch(url, { method: 'GET', mode: 'no-cors' })
+      .then(() => console.log('Enviado a Sheets (GET fallback)'))
+      .catch(err => console.warn('Error enviando a Sheets — dato guardado localmente:', err));
+  });
 }
  
 // ── PERSISTENCIA localStorage ─────────────────────────────────────────
